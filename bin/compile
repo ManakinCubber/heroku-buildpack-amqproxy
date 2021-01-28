@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# bin/compile <build-dir>
+
+echo "-----> Installing amqproxy using build directory $1"
+
+BUILD_DIR=$1
+PACKAGE="https://github.com/cloudamqp/amqproxy/releases/download/v0.5.0/amqproxy-0.5.0-1.linux-x86_64-static.tar.gz"
+BINARY="amqproxy/amqproxy"
+LOCATION="$BUILD_DIR/vendor/amqproxy"
+
+cd $BUILD_DIR
+mkdir -p $LOCATION/bin
+wget -O amqproxy.tgz $PACKAGE
+tar xvf amqproxy.tgz
+mv $BINARY $LOCATION/bin/amqproxy
+
+echo "-----> Building runtime environment for amqproxy to $LOCATION"
+
+mkdir -p $BUILD_DIR/.profile.d
+echo "export PATH=\"\$HOME/vendor/amqproxy/bin:\$PATH\"" > $BUILD_DIR/.profile.d/amqproxy.sh
